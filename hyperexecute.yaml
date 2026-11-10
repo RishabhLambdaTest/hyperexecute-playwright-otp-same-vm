@@ -1,0 +1,29 @@
+version: "0.1"
+runson: win
+autosplit: true
+concurrency: 1
+globalTimeout: 15
+testSuiteTimeout: 15
+testSuiteStep: 15
+captureScreenRecordingForScenarios: true
+runtime:
+  - language: python
+    version: "3.10"
+pre:
+  - pip install --quiet playwright==1.62.0
+  - python -m playwright install chromium
+env:
+  LOGIN_EMAIL: 'email<>'
+  OTP: "000000"
+  HEADLESS: "false"
+testDiscovery:
+  type: raw
+  mode: static
+  command: exit 0
+  dependentScenariosJsonPaths: ["files.json"]
+testRunnerCommand: python -u hyperexecute_playwright_two_steps.py $test
+uploadArtefacts:
+  - name: out
+    path:
+      - out/**
+jobLabel: [qa-flow, playwright, local-chromium, dependent-request-verify]
