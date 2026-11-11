@@ -2,16 +2,16 @@ version: "0.1"
 runson: win
 autosplit: true
 concurrency: 1
-globalTimeout: 15
-testSuiteTimeout: 15
-testSuiteStep: 15
+globalTimeout: 20
+testSuiteTimeout: 20
+testSuiteStep: 20
 captureScreenRecordingForScenarios: true
 runtime:
   - language: python
     version: "3.10"
 pre:
   - pip install --quiet playwright==1.62.0
-  - python -m playwright install chromium
+  - python -m playwright install chromium firefox webkit
 env:
   LOGIN_EMAIL: 'email<>'
   OTP: "000000"
@@ -26,4 +26,4 @@ uploadArtefacts:
   - name: out
     path:
       - out/**
-jobLabel: [qa-flow, playwright, local-chromium, dependent-request-verify]
+jobLabel: [qa-flow, playwright, chromium-firefox-webkit, dependent-request-verify]

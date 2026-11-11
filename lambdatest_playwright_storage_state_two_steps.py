@@ -1,6 +1,6 @@
 """
 Web OTP login with Playwright in one browser session on this machine (a HyperExecute VM or your laptop), with
-Chromium started here (no LambdaTest Playwright grid). Standalone, one process.
+the browser started here (no LambdaTest Playwright grid). Standalone, one process.
 
   Step 1  request_otp         open the portal, sign in with the email, wait for the OTP page; the page stays open.
   Step 2  get_otp             OTP env var, else poll OTP_COMMAND (a command that prints only the code, e.g. a
@@ -15,7 +15,8 @@ Run:
     pip install playwright && python -m playwright install chromium
     export LOGIN_EMAIL=...   (and OTP or OTP_COMMAND, or type the OTP when asked)
     python lambdatest_playwright_storage_state_two_steps.py
-Optional: WEB_URL (default below), HEADLESS (default "true"), OTP_WAIT_SECONDS (default 300).
+Optional: BROWSER (chromium, firefox or webkit; default chromium), WEB_URL (default below),
+HEADLESS (default "true"), OTP_WAIT_SECONDS (default 300).
 Screenshots go to ./out/.
 """
 import json
@@ -32,6 +33,7 @@ BASE = os.environ.get("WEB_URL", "https://www.montyesim.com").rstrip("/")
 EMAIL = os.environ["LOGIN_EMAIL"]
 OUT = os.path.abspath("out")
 HEADLESS = os.environ.get("HEADLESS", "true").lower() != "false"
+BROWSER = os.environ.get("BROWSER", "chromium")
 
 
 def accept_cookies(page, timeout=10000):
@@ -107,7 +109,7 @@ def verify_otp(page, otp):
 def main():
     os.makedirs(OUT, exist_ok=True)
     with sync_playwright() as playwright:
-        browser = playwright.chromium.launch(headless=HEADLESS)
+        browser = getattr(playwright, BROWSER).launch(headless=HEADLESS)
         try:
             page = browser.new_page()
             request_otp(page)

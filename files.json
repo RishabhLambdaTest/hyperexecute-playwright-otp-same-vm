@@ -1,1 +1,1 @@
-[["request", "verify"]]
+[["request-chromium", "verify-chromium"], ["request-firefox", "verify-firefox"], ["request-webkit", "verify-webkit"]]
